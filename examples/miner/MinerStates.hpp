@@ -24,7 +24,7 @@ SOFTWARE.
 
 #pragma once
 
-#include "../../include/SFMLAI/State.hpp"
+#include "../../include/mercer/State.hpp"
 
 enum class MinerStateType {
     EnterMineDigNugget,
