@@ -1,6 +1,8 @@
 #include "mercer/Misc/StringUtils.hpp"
 
-std::vector<std::string> split_string(const std::string &data, const std::string &delimiter) {
+namespace mercer {
+
+std::vector<std::string> splitString(const std::string &data, const std::string &delimiter) {
     std::vector<std::string> result;
 
     size_t pos = 0;
@@ -23,4 +25,6 @@ std::vector<std::string> split_string(const std::string &data, const std::string
 
 bool compare(const std::string &s1, const std::string &s2) {
     return s1.compare(s2) == 0;
+}
+
 }

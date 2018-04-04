@@ -38,18 +38,18 @@ private:
     static std::unique_ptr<T> service;
 public:
     static void provide(std::unique_ptr<T> service) {
-        ServiceLocator::service = std::move<>(service);
+        ServiceProvider::service = std::move<>(service);
     }
     template<typename... Args>
     static void provideType(Args&&... args) {
         provide(std::make_unique<T>(std::forward<Args>(args)...));
     }
     static T &getService() {
-        return *(ServiceLocator::service.get());
+        return *(ServiceProvider::service.get());
     }
 };
 
 template <typename T>
-std::unique_ptr<T> ServiceLocator<T>::service;
+std::unique_ptr<T> ServiceProvider<T>::service;
 
 }
