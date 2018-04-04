@@ -24,6 +24,8 @@ SOFTWARE.
 
 #pragma once
 
+namespace mercer {
+
 template <typename T>
 class State {
 public:
@@ -34,3 +36,5 @@ public:
     virtual void execute(T&) = 0;
     virtual void exit(T&) = 0;
 };
+
+}

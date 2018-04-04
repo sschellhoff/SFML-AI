@@ -24,14 +24,10 @@ SOFTWARE.
 
 #pragma once
 
+#include <string>
+
 namespace mercer {
 
-class BaseEntity {
-public:
-    virtual ~BaseEntity() {
-    }
-
-    virtual void update() = 0;
-};
+std::string loadTextFile(const std::string &path);
 
 }

@@ -26,12 +26,11 @@ SOFTWARE.
 
 namespace mercer {
 
-class BaseEntity {
+class NonCopyable {
 public:
-    virtual ~BaseEntity() {
-    }
-
-    virtual void update() = 0;
+    NonCopyable() {}
+    NonCopyable(const NonCopyable&) = delete;
+    NonCopyable& operator=(const NonCopyable&) = delete;
 };
 
 }

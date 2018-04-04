@@ -1,7 +1,8 @@
-# SFML-AI
-Some AI based on Mat Bucklands 'Programming Game AI by Example'
+# A collection of useful SFML related classes
 
 ## Current status
+Some AI based on Mat Bucklands 'Programming Game AI by Example'
+
 State form chapter 2 with simple example in *examples/miner*
 
 How to build with g++:

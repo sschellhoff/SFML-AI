@@ -24,14 +24,23 @@ SOFTWARE.
 
 #pragma once
 
+#include <string>
+#include <vector>
+#include <memory>
+
 namespace mercer {
 
-class BaseEntity {
-public:
-    virtual ~BaseEntity() {
-    }
+std::vector<std::string> splitString(const std::string &data, const std::string &delimiter);
 
-    virtual void update() = 0;
-};
+template<typename ... Args>
+std::string formatString( const std::string& format, Args ... args )
+{
+    size_t size = snprintf( nullptr, 0, format.c_str(), args ... ) + 1; // Extra space for '\0'
+    std::unique_ptr<char[]> buf( new char[ size ] ); 
+    snprintf( buf.get(), size, format.c_str(), args ... );
+    return std::string( buf.get(), buf.get() + size - 1 ); // We don't want the '\0' inside
+}
+
+bool compare(const std::string &s1, const std::string &s2);
 
 }

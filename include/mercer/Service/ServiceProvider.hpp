@@ -24,14 +24,32 @@ SOFTWARE.
 
 #pragma once
 
+#include <memory>
+#include <type_traits>
+#include "BaseService.hpp"
+
 namespace mercer {
 
-class BaseEntity {
+template <typename T>
+class ServiceProvider {
+    static_assert(std::is_base_of<BaseService, T>::value);
+private:
+    ServiceProvider() {}
+    static std::unique_ptr<T> service;
 public:
-    virtual ~BaseEntity() {
+    static void provide(std::unique_ptr<T> service) {
+        ServiceLocator::service = std::move<>(service);
     }
-
-    virtual void update() = 0;
+    template<typename... Args>
+    static void provideType(Args&&... args) {
+        provide(std::make_unique<T>(std::forward<Args>(args)...));
+    }
+    static T &getService() {
+        return *(ServiceLocator::service.get());
+    }
 };
+
+template <typename T>
+std::unique_ptr<T> ServiceLocator<T>::service;
 
 }

@@ -24,14 +24,11 @@ SOFTWARE.
 
 #pragma once
 
+#include "../Misc/NonCopyable.hpp"
+
 namespace mercer {
 
-class BaseEntity {
-public:
-    virtual ~BaseEntity() {
-    }
-
-    virtual void update() = 0;
+class BaseService : private NonCopyable {
 };
 
 }

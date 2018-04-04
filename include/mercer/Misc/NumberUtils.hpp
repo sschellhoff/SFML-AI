@@ -26,12 +26,14 @@ SOFTWARE.
 
 namespace mercer {
 
-class BaseEntity {
-public:
-    virtual ~BaseEntity() {
-    }
+template <typename T>
+T clamp(T value, T min, T max) {
+    return (value <= min) ? min : ((value >= max) ? max : value);
+}
 
-    virtual void update() = 0;
-};
+template <typename T>
+T thresholdCutoff(T value, T min_threshold, T max_threshold, T null_value) {
+    return (value <= min_threshold) ? value : ((value >= max_threshold) ? value : null_value);
+}
 
 }

@@ -24,8 +24,8 @@ SOFTWARE.
 
 #pragma once
 
-#include "../../include/mercer/BaseEntity.hpp"
-#include "../../include/mercer/State.hpp"
+#include "../../include/mercer/AI/BaseEntity.hpp"
+#include "../../include/mercer/AI/State.hpp"
 #include <map>
 #include <string>
 #include <memory>

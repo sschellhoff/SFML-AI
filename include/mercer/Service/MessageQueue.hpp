@@ -24,14 +24,39 @@ SOFTWARE.
 
 #pragma once
 
+#include <queue>
+#include <vector>
+
+#include "BaseService.hpp"
+
 namespace mercer {
 
-class BaseEntity {
+template <
+    typename T,
+    typename Container = std::vector<T>,
+    typename Compare = std::less<typename Container::value_type>
+    >
+class MessageQueue : public BaseService {
+private:
+    std::priority_queue<T, Container, Compare> messages;
 public:
-    virtual ~BaseEntity() {
+    bool isEmpty() const {
+        return messages.empty();
     }
 
-    virtual void update() = 0;
+    int size() const {
+        return messages.size();
+    }
+
+    T getNext() {
+        auto element = messages.top();
+        messages.pop();
+        return element;
+    }
+
+    void addJob(const T job) {
+        messages.push(job);
+    }
 };
 
 }
