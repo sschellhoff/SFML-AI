@@ -44,40 +44,40 @@ public:
     bool hasKey(const K &key) const;
 };
 
-template <typename R, typename K=std::string>
-ResourceHolder::ResourceHolder() {
+template <typename R, typename K>
+ResourceHolder<R, K>::ResourceHolder() {
 }
 
-template <typename R, typename K=std::string>
-void ResourceHolder::add(const K &key, const std::string &path) {
+template <typename R, typename K>
+void ResourceHolder<R, K>::add(const K &key, const std::string &path) {
     if(!hasKey(key)) {
-        (data[key] = std::make_unique<R>()).loadFromFile(path);
+        (data[key] = std::make_unique<R>())->loadFromFile(path);
     } else {
     }
 }
 
-template <typename R, typename K=std::string>
-R &ResourceHolder::get(const K &key) {
-    return data.get(key);
+template <typename R, typename K>
+R &ResourceHolder<R, K>::get(const K &key) {
+    return *data.at(key);
 }
 
-template <typename R, typename K=std::string>
-const R &ResourceHolder::get(const K &key) const {
-    return data.get(key);
+template <typename R, typename K>
+const R &ResourceHolder<R, K>::get(const K &key) const {
+    return *data.at(key);
 }
 
-template <typename R, typename K=std::string>
-R &ResourceHolder::operator[](const K &key) {
-    return data.get(key);
+template <typename R, typename K>
+R &ResourceHolder<R, K>::operator[](const K &key) {
+    return *data.at(key);
 }
 
-template <typename R, typename K=std::string>
-const R &ResourceHolder::operator[](const K &key) const {
-    return data.get(key);
+template <typename R, typename K>
+const R &ResourceHolder<R, K>::operator[](const K &key) const {
+    return *data.at(key);
 }
 
-template <typename R, typename K=std::string>
-bool ResourceHolder::hasKey(const K &key) const {
+template <typename R, typename K>
+bool ResourceHolder<R, K>::hasKey(const K &key) const {
     return data.find(key) != data.end();
 }
 
