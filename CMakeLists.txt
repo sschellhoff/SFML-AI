@@ -25,6 +25,7 @@ set(LIBRARY_NAME "mercer")
 add_library(${LIBRARY_NAME} SHARED
   src/FileUtils.cpp
   src/StringUtils.cpp
+  src/VectorUtils.cpp
 )
 
 # Detect and add SFML
