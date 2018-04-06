@@ -24,9 +24,9 @@ include_directories("${PROJECT_BINARY_DIR}")
 set(LIBRARY_NAME "mercer")
 add_library(${LIBRARY_NAME} SHARED
   src/FileUtils.cpp
+  src/Seek.cpp
   src/StringUtils.cpp
   src/VectorUtils.cpp
-  src/Seek.cpp
 )
 
 # Detect and add SFML

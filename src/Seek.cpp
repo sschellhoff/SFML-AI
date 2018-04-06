@@ -22,15 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#pragma once
-
 #include "mercer/AI/Steering/Seek.hpp"
 #include "mercer/Misc/VectorUtils.hpp"
 
 namespace mercer {
 
 sf::Vector2f seek(const sf::Vector2f &target_position, const sf::Vector2f &own_position, const sf::Vector2f &own_velocity, float max_speed) {
-    sf::Vector2f desired_velocity = get_normalized(target_position - own_velocity) * max_speed;
+    sf::Vector2f desired_velocity = getNormalized(target_position - own_velocity) * max_speed;
 
     return desired_velocity - own_velocity;
 }

@@ -28,12 +28,12 @@ SOFTWARE.
 
 namespace mercer {
 
-float vector_length_squared(const sf::Vector2f &vector);
+float vectorLengthSquared(const sf::Vector2f &vector);
 
-float vector_length(const sf::Vector2f &vector);
+float vectorLength(const sf::Vector2f &vector);
 
-sf::Vector2f process_deadzone(sf::Vector2f vector, float deadzone);
+sf::Vector2f processDeadzone(sf::Vector2f vector, float deadzone);
 
-sf::Vector2f get_normalized(const sf::Vector2f &vector);
+sf::Vector2f getNormalized(const sf::Vector2f &vector);
 
 }

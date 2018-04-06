@@ -22,29 +22,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#pragma once
-
 #include "mercer/Misc/VectorUtils.hpp"
 #include <cmath>
 
 namespace mercer {
 
-float vector_length_squared(const sf::Vector2f &vector) {
+float vectorLengthSquared(const sf::Vector2f &vector) {
     return vector.x * vector.x + vector.y * vector.y;
 }
 
-float vector_length(const sf::Vector2f &vector) {
-    auto length_squared = vector_length_squared(vector);
+float vectorLength(const sf::Vector2f &vector) {
+    auto length_squared = vectorLengthSquared(vector);
     return sqrt(length_squared);
 }
 
-sf::Vector2f process_deadzone(sf::Vector2f vector, float deadzone) {
-    auto length_squared = vector_length_squared(vector);
+sf::Vector2f processDeadzone(sf::Vector2f vector, float deadzone) {
+    auto length_squared = vectorLengthSquared(vector);
     return (length_squared >= deadzone) ? vector : ((length_squared <= -deadzone) ? vector : sf::Vector2f{});
 }
 
-sf::Vector2f get_normalized(const sf::Vector2f &vector) {
-    auto sqrt_length = vector_length_squared(vector);
+sf::Vector2f getNormalized(const sf::Vector2f &vector) {
+    auto sqrt_length = vectorLengthSquared(vector);
     auto one_div_length = static_cast<float>(sqrt(1.f / sqrt_length));
     return sf::Vector2f{vector.x * one_div_length, vector.y * one_div_length};
 }
