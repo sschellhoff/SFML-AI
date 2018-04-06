@@ -26,6 +26,7 @@ add_library(${LIBRARY_NAME} SHARED
   src/FileUtils.cpp
   src/StringUtils.cpp
   src/VectorUtils.cpp
+  src/Seek.cpp
 )
 
 # Detect and add SFML
@@ -42,12 +43,14 @@ target_include_directories( ${LIBRARY_NAME} PRIVATE include)
 
 set(PUBLIC_INTERFACE)
 list(APPEND PUBLIC_INTERFACE
+  mercer/AI/Steering/Seek.hpp
   mercer/AI/BaseEntity.hpp
   mercer/AI/State.hpp
   mercer/Misc/FileUtils.hpp
   mercer/Misc/NonCopyable.hpp
   mercer/Misc/NumberUtils.hpp
   mercer/Misc/StringUtils.hpp
+  mercer/Misc/VectorUtils.hpp
   mercer/Resources/ResourceHolder.hpp
   mercer/Service/BaseService.hpp
   mercer/Service/MessageQueue.hpp
