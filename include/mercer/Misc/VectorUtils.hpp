@@ -34,4 +34,6 @@ float vector_length(const sf::Vector2f &vector);
 
 sf::Vector2f process_deadzone(sf::Vector2f vector, float deadzone);
 
+sf::Vector2f get_normalized(const sf::Vector2f &vector);
+
 }
