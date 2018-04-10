@@ -31,10 +31,11 @@ private:
     sf::CircleShape baseShape;
     float mass;
     float max_speed;
-    sf::Vector2f target;
+    float max_steering_force;
     sf::Vector2f velocity;
+    sf::Vector2f steering_force;
 public:
-    Vehicle(const sf::Vector2f &position, const sf::Vector2f &target, float mass, float max_speed, float radius) : baseShape(radius), mass(mass), max_speed(max_speed), target(target), velocity(0.f, 0.f) {
+    Vehicle(const sf::Vector2f &position, float mass, float max_speed, float max_steering_force, float radius) : baseShape(radius), mass(mass), max_speed(max_speed), max_steering_force(max_steering_force),velocity(0.f, 0.f), steering_force(0.f, 0.f) {
         setPosition(position);
         setOrigin(radius, radius);
         baseShape.setOutlineColor(sf::Color::Green);
@@ -47,22 +48,52 @@ public:
         target.draw(baseShape, states);
     }
 
-    void update(float delta_time) {
-        sf::Vector2f acceleration = mercer::seek(target, getPosition(), velocity, max_speed) / mass;
+    void update(const sf::Vector2f &target, float delta_time) {
+        steering_force += mercer::seek(target, getPosition(), velocity, max_speed);
+        steering_force = mercer::truncateVector(steering_force, max_steering_force);
+
+        sf::Vector2f acceleration = steering_force / mass;
+
         velocity += acceleration * delta_time;
+
         velocity = mercer::truncateVector(velocity, max_speed);
-        move(velocity * delta_time);
+
+        setPosition(getPosition() + velocity * delta_time);
+    }
+};
+
+class Target : public sf::Drawable, public sf::Transformable {
+private:
+    sf::CircleShape baseShape;
+public:
+    Target(const sf::Vector2f &position, float radius) : baseShape(radius) {
+        setPosition(position);
+        setOrigin(radius, radius);
+        baseShape.setOutlineColor(sf::Color::Blue);
+        baseShape.setOutlineThickness(3.5f);
+        baseShape.setFillColor(sf::Color{50, 10, 30, 255});
+    }
+
+    virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const {
+        states.transform *= getTransform();
+        target.draw(baseShape, states);
     }
 };
 
 int main(int argc, char** argv) {
 
-    sf::Vector2f agent_position{50.f, 50.f};
+    const sf::Vector2f agent_position{50.f, 50.f};
     float agent_mass = 1.f;
     float agent_max_speed = 100.f;
+    float agent_max_steering_force = 150.f;
     float agent_radius = 20.f;
 
-    Vehicle agent {agent_position, sf::Vector2f{350.f, 250.f}, agent_mass, agent_max_speed, agent_radius};
+    const sf::Vector2f target_position{350.f, 250.f};
+    const float target_radius = 5.f;
+
+    Vehicle agent {agent_position, agent_mass, agent_max_speed, agent_max_steering_force, agent_radius};
+
+    Target target {target_position, target_radius};
 
     sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
 
@@ -90,11 +121,13 @@ int main(int argc, char** argv) {
         while(lag >= time_per_update) {
             ticks++;
             lag -= time_per_update;
-            agent.update(time_per_update.asSeconds());
+            agent.update(target.getPosition(), time_per_update.asSeconds());
         }
 
         window.clear(sf::Color::Black);
+
         window.draw(agent);
+        window.draw(target);
 
         window.display();
     }
