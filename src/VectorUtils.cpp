@@ -38,7 +38,8 @@ float vectorLength(const sf::Vector2f &vector) {
 
 sf::Vector2f processDeadzone(sf::Vector2f vector, float deadzone) {
     auto length_squared = vectorLengthSquared(vector);
-    return (length_squared >= deadzone) ? vector : ((length_squared <= -deadzone) ? vector : sf::Vector2f{});
+    auto deadzone_sqrt = deadzone * deadzone;
+    return (length_squared >= deadzone_sqrt) ? vector : ((length_squared <= -deadzone_sqrt) ? vector : sf::Vector2f{});
 }
 
 sf::Vector2f getNormalized(const sf::Vector2f &vector) {
