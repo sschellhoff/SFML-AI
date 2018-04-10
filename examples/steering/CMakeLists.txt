@@ -14,6 +14,7 @@ link_directories(
 add_executable(
     steering
     main.cpp
+    misc.cpp
     ../../src/Seek.cpp
     ../../src/VectorUtils.cpp
 )
