@@ -24,6 +24,7 @@ include_directories("${PROJECT_BINARY_DIR}")
 set(LIBRARY_NAME "mercer")
 add_library(${LIBRARY_NAME} SHARED
   src/FileUtils.cpp
+  src/Flee.cpp
   src/Seek.cpp
   src/StringUtils.cpp
   src/VectorUtils.cpp
@@ -43,6 +44,7 @@ target_include_directories( ${LIBRARY_NAME} PRIVATE include)
 
 set(PUBLIC_INTERFACE)
 list(APPEND PUBLIC_INTERFACE
+  mercer/AI/Steering/Flee.hpp
   mercer/AI/Steering/Seek.hpp
   mercer/AI/BaseEntity.hpp
   mercer/AI/State.hpp
