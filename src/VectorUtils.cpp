@@ -43,8 +43,16 @@ sf::Vector2f processDeadzone(sf::Vector2f vector, float deadzone) {
 
 sf::Vector2f getNormalized(const sf::Vector2f &vector) {
     auto sqrt_length = vectorLengthSquared(vector);
+    if(sqrt_length == 0) {
+        return sf::Vector2f{0, 0};
+    }
     auto one_div_length = static_cast<float>(sqrt(1.f / sqrt_length));
     return sf::Vector2f{vector.x * one_div_length, vector.y * one_div_length};
+}
+
+sf::Vector2f truncateVector(const sf::Vector2f &vector, float length) {
+    auto normalized = getNormalized(vector);
+    return normalized * length;
 }
 
 }

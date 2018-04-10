@@ -36,4 +36,6 @@ sf::Vector2f processDeadzone(sf::Vector2f vector, float deadzone);
 
 sf::Vector2f getNormalized(const sf::Vector2f &vector);
 
+sf::Vector2f truncateVector(const sf::Vector2f &vector, float length);
+
 }
