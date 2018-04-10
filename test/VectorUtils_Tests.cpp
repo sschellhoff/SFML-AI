@@ -53,17 +53,26 @@ TEST_CASE( "Testing vectorLength", "[VectorUtils][vectorLength]" ) {
 TEST_CASE( "Testing processDeadzone", "[VectorUtils][processDeadzone]" ) {
     const sf::Vector2f zero{0, 0};
     const sf::Vector2f one{1, 1};
+    const sf::Vector2f one_m{-1, -1};
     const sf::Vector2f x_axis{1, 0};
+    const sf::Vector2f x_axis_neg{-1, 0};
     const sf::Vector2f y_axis{0, 1};
+    const sf::Vector2f y_axis_neg{0, -1};
     CHECK( equals(mercer::processDeadzone(zero, 0), zero) );
 
     CHECK( equals(mercer::processDeadzone(one, 0), one) );
+    CHECK( equals(mercer::processDeadzone(one_m, 0), one_m) );
     CHECK( equals(mercer::processDeadzone(x_axis, 0), x_axis) );
+    CHECK( equals(mercer::processDeadzone(x_axis_neg, 0), x_axis_neg) );
     CHECK( equals(mercer::processDeadzone(y_axis, 0), y_axis) );
+    CHECK( equals(mercer::processDeadzone(y_axis_neg, 0), y_axis_neg) );
 
     CHECK( equals(mercer::processDeadzone(one, 1.5f), zero) );
+    CHECK( equals(mercer::processDeadzone(one_m, 1.5f), zero) );
     CHECK( equals(mercer::processDeadzone(x_axis, 1.5f), zero) );
+    CHECK( equals(mercer::processDeadzone(x_axis_neg, 1.5f), zero) );
     CHECK( equals(mercer::processDeadzone(y_axis, 1.5f), zero) );
+    CHECK( equals(mercer::processDeadzone(y_axis_neg, 1.5f), zero) );
 }
 
 // sf::Vector2f getNormalized(const sf::Vector2f &vector)
@@ -86,7 +95,23 @@ TEST_CASE( "Testing getNormalized", "[VectorUtils][getNormalized]" ) {
 
 // sf::Vector2f truncateVector(const sf::Vector2f &vector, float length)
 TEST_CASE( "Testing truncateVector", "[VectorUtils][truncateVector]" ) {
-    //CHECK ( true == false ); // write tests
+    const sf::Vector2f zero{0, 0};
+    const sf::Vector2f one{1, 1};
+    const sf::Vector2f one_m{-1, -1};
+    const sf::Vector2f x_axis{1, 0};
+    const sf::Vector2f x_axis_neg{-1, 0};
+    const sf::Vector2f y_axis{0, 1};
+    const sf::Vector2f y_axis_neg{0, -1};
+    CHECK( equals(mercer::truncateVector(zero, 0.f), zero) );
+    CHECK( equals(mercer::truncateVector(zero, 2.f), zero) );
+
+    CHECK( equals(mercer::truncateVector(x_axis, 2.f), sf::Vector2f{2, 0}) );
+    CHECK( equals(mercer::truncateVector(x_axis_neg, 2.f), sf::Vector2f{-2, 0}) );
+    CHECK( equals(mercer::truncateVector(y_axis, 2.f), sf::Vector2f{0, 2}) );
+    CHECK( equals(mercer::truncateVector(y_axis_neg, 2.f), sf::Vector2f{0, -2}) );
+
+    CHECK( equals(mercer::truncateVector(one, 5.f), sf::Vector2f(3.53553390594f, 3.53553390594f)) );
+    CHECK( equals(mercer::truncateVector(one_m, 5.f), sf::Vector2f(-3.53553390594f, -3.53553390594f)) );
 }
 
 // Helper Methods
