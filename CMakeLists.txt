@@ -24,10 +24,13 @@ include_directories("${PROJECT_BINARY_DIR}")
 set(LIBRARY_NAME "mercer")
 add_library(${LIBRARY_NAME} SHARED
   src/Arrive.cpp
+  src/ECS.cpp
+  src/Entity.cpp
   src/FileUtils.cpp
   src/Flee.cpp
   src/Seek.cpp
   src/StringUtils.cpp
+  src/SystemBase.cpp
   src/VectorUtils.cpp
 )
 
@@ -45,14 +48,22 @@ target_include_directories( ${LIBRARY_NAME} PRIVATE include)
 
 set(PUBLIC_INTERFACE)
 list(APPEND PUBLIC_INTERFACE
+  mercer/AI/Steering/Arrive.hpp
   mercer/AI/Steering/Flee.hpp
   mercer/AI/Steering/Seek.hpp
   mercer/AI/BaseEntity.hpp
   mercer/AI/State.hpp
+  mercer/ECS/ComponentBase.hpp
+  mercer/ECS/ComponentBitmask.hpp
+  mercer/ECS/ECS.hpp
+  mercer/ECS/Entity.hpp
+  mercer/ECS/EntityID.hpp
+  mercer/ECS/SystemBase.hpp
   mercer/Misc/FileUtils.hpp
   mercer/Misc/NonCopyable.hpp
   mercer/Misc/NumberUtils.hpp
   mercer/Misc/StringUtils.hpp
+  mercer/Misc/TypeInfoRef.hpp  
   mercer/Misc/VectorUtils.hpp
   mercer/Resources/ResourceHolder.hpp
   mercer/Service/BaseService.hpp
