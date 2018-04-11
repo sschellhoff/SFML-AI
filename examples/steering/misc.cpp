@@ -24,7 +24,7 @@ SOFTWARE.
 
 #include "misc.hpp"
 
-#include "../../include/mercer/AI/Steering/Seek.hpp"
+#include "../../include/mercer/AI/Steering/Arrive.hpp"
 #include "../../include/mercer/Misc/VectorUtils.hpp"
 
 Vehicle::Vehicle(const sf::Vector2f &position, float mass, float max_speed, float max_steering_force, float radius) : baseShape(radius), mass(mass), max_speed(max_speed), max_steering_force(max_steering_force),velocity(0.f, 0.f), steering_force(0.f, 0.f) {
@@ -41,7 +41,7 @@ void Vehicle::draw(sf::RenderTarget &target, sf::RenderStates states) const {
 }
 
 void Vehicle::update(const sf::Vector2f &target, float delta_time) {
-    steering_force += mercer::seek(target, getPosition(), velocity, max_speed);
+    steering_force += mercer::arrive(target, getPosition(), velocity, max_speed, 0.7f);
     steering_force = mercer::truncateVector(steering_force, max_steering_force);
 
     sf::Vector2f acceleration = steering_force / mass;

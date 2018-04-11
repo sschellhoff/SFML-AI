@@ -23,6 +23,7 @@ include_directories("${PROJECT_BINARY_DIR}")
 # Define sources and executable
 set(LIBRARY_NAME "mercer")
 add_library(${LIBRARY_NAME} SHARED
+  src/Arrive.cpp
   src/FileUtils.cpp
   src/Flee.cpp
   src/Seek.cpp

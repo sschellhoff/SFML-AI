@@ -15,7 +15,7 @@ add_executable(
     steering
     main.cpp
     misc.cpp
-    ../../src/Seek.cpp
+    ../../src/Arrive.cpp
     ../../src/VectorUtils.cpp
 )
 
