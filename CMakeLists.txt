@@ -59,6 +59,7 @@ list(APPEND PUBLIC_INTERFACE
   mercer/ECS/Entity.hpp
   mercer/ECS/EntityID.hpp
   mercer/ECS/SystemBase.hpp
+  mercer/Misc/Bitset.hpp
   mercer/Misc/FileUtils.hpp
   mercer/Misc/NonCopyable.hpp
   mercer/Misc/NumberUtils.hpp
