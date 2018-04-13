@@ -118,7 +118,7 @@ TEST_CASE("Testing to string", "[Bitstring]") {
     bitset.set(1);
     bitset.set(3);
     std::cout << bitset.size() << " " << bitset.toString() << std::endl;
-    CHECK(false);
+    CHECK(std::string("01010000000000000000000000000000") == bitset.toString());
 }
 // more tests for:
 // toString
