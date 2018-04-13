@@ -116,10 +116,10 @@ public:
         auto position_in_block = getPositionInBlock(position);
         return (data[block] & (1 << position_in_block)) != 0;
     }
-    bool any(size_type position) const {
+    bool any() const {
         return !none();
     }
-    bool none(size_type position) const {
+    bool none() const {
         for(auto &block : data) {
             if(block != 0) {
                 return false;
@@ -127,7 +127,7 @@ public:
         }
         return true;
     }
-    bool all(size_type position) const {
+    bool all() const {
         for(auto &block : data) {
             if(~block != 0) {
                 return false;

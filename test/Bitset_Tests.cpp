@@ -32,16 +32,29 @@ TEST_CASE( "Testing resize", "[Bitset]" ) {
     CHECK(uint_Bitset.empty() == false);
 }
 
+TEST_CASE( "Testing accessors", "[Bitset]") {
+    mercer::Bitset<> bitset;
+    
+    CHECK(bitset.none());
+    CHECK(bitset.any() == false);
+    CHECK(bitset.all() == false);
+    bitset.set();
+    CHECK(bitset.any());
+    CHECK(bitset.all());
+    CHECK(bitset.none() == false);
+    bitset.reset(1);
+    CHECK(bitset.any());
+    CHECK(bitset.all() == false);
+    CHECK(bitset.none() == false);
+}
+
 // more tests for:
 // set
 // reset
 // flip
 // get
 // clear
-// push_back
-// any
-// none
-// all
+// push back
 // getFirst
 // getNext
 // toString
