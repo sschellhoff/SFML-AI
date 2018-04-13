@@ -37,10 +37,10 @@ public:
     using size_type = std::size_t;
 private:
     std::vector<BlockType> data;
-    size_type block_size;
+    const size_type block_size;
 
     size_type getBlockNo(size_type position) const {
-        return position / block_size;;
+        return position / block_size;
     }
     size_type getPositionInBlock(size_type position) const {
         return position % block_size;
@@ -153,7 +153,7 @@ public:
     }
 
     size_type getFirst() const {
-        for(size_type block; block < numBlocks(); block++) {
+        for(size_type block = 0; block < numBlocks(); block++) {
             if(data[block] != 0) {
                 for(size_type position = 0; position < block_size; position++) {
                     if((data[block] & (1 << position)) != 0) {
@@ -167,8 +167,8 @@ public:
     size_type getNext(size_type position) const {
         auto initial_block = getBlockNo(position);
         auto position_in_block = getPositionInBlock(position);
-        for(size_type block = initial_block; block < data.size(); block++) {
-            if(block != 0) {
+        for(size_type block = initial_block; block < numBlocks(); block++) {
+            if(data[block] != 0) {
                 for(size_type pos = (block == initial_block) ? position_in_block : 0; pos < block_size; pos++) {
                     if((data[block] & (1 << pos)) != 0) {
                         return block * block_size + pos;
