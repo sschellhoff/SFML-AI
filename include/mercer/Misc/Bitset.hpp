@@ -46,7 +46,7 @@ private:
         return position % block_size;
     }
 public:
-    explicit Bitset(size_type initial_size = 1) : data(initial_size, false), block_size(sizeof(BlockType)) {
+    explicit Bitset(size_type initial_size = 1) : data(initial_size, false), block_size(sizeof(BlockType) * 8) {
     }
 
     size_type getBlockSize() const {
@@ -70,7 +70,7 @@ public:
 
     Bitset &operator~() const;
 
-    Bitset &set(size_type position, bool value = true) {
+    Bitset &setValue(size_type position, bool value) {
         auto block = getBlockNo(position);
         auto position_in_block = getPositionInBlock(position);
         if(value) {
@@ -80,7 +80,7 @@ public:
         }
         return *this;
     }
-    Bitset &set(bool value = true) {
+    Bitset &setAllBits(bool value) {
         auto initial_size = data.size();
         data.clear();
         if(value) {
@@ -90,13 +90,19 @@ public:
         }
         return *this;
     }
+    
+
+    Bitset &set(size_type position) {
+        return setValue(position, true);
+    }
+    Bitset &set() {
+        return setAllBits(true);
+    }
     Bitset &reset(size_type position) {
-        set(position, false);
-        return *this;
+        return setValue(position, false);
     }
     Bitset &reset() {
-        set(false);
-        return *this;
+        return setAllBits(false);
     }
     Bitset &flip(size_type position) {
         auto block = getBlockNo(position);
@@ -147,7 +153,7 @@ public:
     }
 
     size_type getFirst() const {
-        for(size_type block; block < data.size(); block++) {
+        for(size_type block; block < numBlocks(); block++) {
             if(data[block] != 0) {
                 for(size_type position = 0; position < block_size; position++) {
                     if((data[block] & (1 << position)) != 0) {
