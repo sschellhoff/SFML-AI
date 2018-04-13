@@ -27,6 +27,7 @@ SOFTWARE.
 #include <vector>
 #include <cstddef>
 #include <string>
+#include <sstream>
 
 namespace mercer {
 
@@ -36,6 +37,7 @@ public:
     using size_type = std::size_t;
 private:
     std::vector<BlockType> data;
+    size_type block_size;
 
     size_type getBlockNo(size_type position) const {
         return position / block_size;;
@@ -44,13 +46,15 @@ private:
         return position % block_size;
     }
 public:
-    size_type block_size;
-
-    explicit Bitset(size_type initial_size = 0) : data(initial_size, false), block_size(sizeof(BlockType)) {
+    explicit Bitset(size_type initial_size = 1) : data(initial_size, false), block_size(sizeof(BlockType)) {
     }
 
-    void resize(size_type num_bits, bool value = false) {
-        data.resize(num_bits, value);
+    size_type getBlockSize() const {
+        return block_size;
+    }
+
+    void resize(size_type num_blocks, bool value = false) {
+        data.resize(num_blocks, value);
     }
     void clear() {
         data.clear();
@@ -170,7 +174,14 @@ public:
     }
 
     std::string toString() const {
-        return "";
+        if(empty()) {
+            return "";
+        }
+        std::stringstream result;
+        for(size_type position = 0; position < size(); position++) {
+            result << (get(position) ? "1" : "0");
+        }
+        return result.str();
     }
 };
 

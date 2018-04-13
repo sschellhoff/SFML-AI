@@ -16,6 +16,7 @@ link_directories(
 add_executable(
     tests
     main.cpp
+    Bitset_Tests.cpp
     NumberUtils_Tests.cpp
     VectorUtils_Tests.cpp
 )
