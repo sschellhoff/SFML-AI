@@ -24,6 +24,7 @@ SOFTWARE.
 
 #include <SFML/Graphics.hpp>
 #include <string>
+#include <iostream>
 #include "../../include/mercer/ECS/ECS.hpp"
 #include "../../include/mercer/ECS/Entity.hpp"
 #include "../../include/mercer/ECS/ComponentBase.hpp"
@@ -31,6 +32,9 @@ SOFTWARE.
 
 class TextComponent : public mercer::ComponentBase {
 public:
+    static std::size_t GetId() {
+        return 0;
+    }
     TextComponent(const std::string &text) : text(text) {
     }
 
@@ -39,6 +43,9 @@ public:
 
 class NumberComponent : public mercer::ComponentBase {
 public:
+    static std::size_t GetId() {
+        return 1;
+    }
     NumberComponent() : number(0) {
     }
 
@@ -56,8 +63,7 @@ public:
 };
 
 int main(int argc, char** argv) {
-
-    mercer::ECS ecs;
+    mercer::ECS ecs{2};
     auto entity = ecs.createEntity();
     entity.addComponent<TextComponent>("");
     auto &number_component = entity.addComponent<NumberComponent>();
