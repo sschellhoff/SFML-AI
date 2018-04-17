@@ -29,6 +29,7 @@ SOFTWARE.
 #include "../Misc/TypeInfoRef.hpp"
 #include <unordered_map>
 #include <memory>
+#include <vector>
 
 namespace mercer {
 
@@ -38,46 +39,51 @@ class ComponentBase;
 
 class ECS {
 private:
-    using ComponentMap = std::unordered_map<TypeInfoRef, std::unique_ptr<ComponentBase>, Hasher, EqualsTo>;
-    using EntityToComponentMap = std::unordered_map<EntityID, ComponentMap>;
-    using ComponentToBismaskIndex = std::unordered_map<TypeInfoRef, BitmaskIndexType, Hasher, EqualsTo>;
+    using ComponentMap = std::unordered_map<std::size_t, std::unique_ptr<ComponentBase>>;
+    using EntitiesComponents = std::unordered_map<EntityID, ComponentMap>;
+    using EntitiesBitmask = std::unordered_map<EntityID, Bitmask>;
+    using ComponentToSystem = std::vector<std::vector<SystemBase*>>;
 
     EntityID next_entity_id;
-    BitmaskIndexType next_bitmask_index;
 
-    EntityToComponentMap components;
-    ComponentToBismaskIndex component_bitmask_indices;
+    EntitiesBitmask bitmasks;
+    EntitiesComponents components;
+    ComponentToSystem systemsRequiredComponents;
+    ComponentToSystem systemsExcludedComponents;
+
+    void addFittingEntitiesToSystem(SystemBase &system);
 public:
-    ECS();
+    ECS(std::size_t);
 
     Entity createEntity();
     void destroyEntity(EntityID entity_id);
 
     template<typename T>
     T &getComponent(EntityID id) {
-        return *static_cast<T*>(components[id][typeid(T)].get());
+        return *static_cast<T*>(components[id][T::GetId()].get());
     }
 
     template<typename T, typename... Args>
     T &addComponent(EntityID id, Args&&... args) {
-        components[id][typeid(T)] = std::make_unique<T>(std::forward<Args>(args)...);
+        components[id][T::GetId()] = std::make_unique<T>(std::forward<Args>(args)...);
+        auto &sysExc = systemsExcludedComponents[T::GetId()];
+        for(auto system : sysExc) {
+            // if system contains entity, remove
+        }
+        auto &sysReq = systemsRequiredComponents[T::GetId()];
+        for(auto system : sysReq) {
+            // if systems bitmasks fit entities, add
+        }
         return getComponent<T>(id);
     }
 
     template<typename T>
     void removeComponent(EntityID id) {
-        components[id].erase(typeid(T));
+        components[id].erase(T::GetId());
     }
 
-    template<typename T>
-    void registerComponentType() {
-        registerComponentType(typeid(T));
-    }
-
-    void registerComponentType(const std::type_info &type);
-
-    void registerSystem(const SystemBase &system);
-    void removeSystem();
+    void registerSystem(SystemBase &system);
+    void removeSystem(SystemBase &system);
 };
 
 }

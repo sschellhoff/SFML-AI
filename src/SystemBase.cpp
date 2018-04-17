@@ -29,8 +29,19 @@ namespace mercer {
 SystemBase::SystemBase(ECS *ecs) : ecs(ecs) {
 }
 
-const std::vector<TypeInfoRef> &SystemBase::getRequired() const {
-    return required;
+std::vector<Bitmask::size_type> SystemBase::getRequiredComponentIds() const {
+    return required.getSet();
+}
+
+std::vector<Bitmask::size_type> SystemBase::getExcludedComponentIds() const {
+    return excluded.getSet();
+}
+
+bool SystemBase::fits(Bitmask bitmask) const {
+    // excluded && bitmask = 0
+    // required && bitmask = required
+    // then true
+    return false;
 }
 
 }

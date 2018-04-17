@@ -24,6 +24,8 @@ SOFTWARE.
 
 #pragma once
 
+#include <cstddef>
+
 namespace mercer {
 
 class ComponentBase {

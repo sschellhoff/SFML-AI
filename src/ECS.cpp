@@ -27,34 +27,52 @@ SOFTWARE.
 #include "mercer/ECS/Entity.hpp"
 #include "mercer/ECS/ComponentBase.hpp"
 #include "mercer/ECS/SystemBase.hpp"
+#include <algorithm>
 
 namespace mercer {
 
-ECS::ECS() : next_entity_id(0) {
+ECS::ECS(std::size_t max_components) : next_entity_id(0), systemsRequiredComponents(max_components), systemsExcludedComponents(max_components) {
 }
 
 Entity ECS::createEntity() {
-    return Entity{next_entity_id++, this};
+    bitmasks.insert({next_entity_id++, Bitmask{}});
+    return Entity{next_entity_id, this};
 }
 
 void ECS::destroyEntity(EntityID entity_id) {
+    bitmasks.erase(entity_id);
     components.erase(entity_id);
 }
 
-void ECS::registerComponentType(const std::type_info &type) {
-    if(component_bitmask_indices.find(type) == component_bitmask_indices.end()) {
-        component_bitmask_indices[type] = next_bitmask_index++;
+void ECS::registerSystem(SystemBase &system) {
+    const auto &requiredComponents = system.getRequiredComponentIds();
+    for(auto &component : requiredComponents) {
+        systemsRequiredComponents[component].push_back(&system);
+    }
+    const auto &excludedComponents = system.getExcludedComponentIds();
+    for(auto &component : excludedComponents) {
+        systemsExcludedComponents[component].push_back(&system);
+    }
+    addFittingEntitiesToSystem(system);
+}
+
+void ECS::removeSystem(SystemBase &system) {
+    const auto &requiredComponents = system.getRequiredComponentIds();
+    for(auto &component : requiredComponents) {
+        auto &req = systemsRequiredComponents[component];
+        req.erase(std::remove(req.begin(), req.end(), &system), req.end());
+    }
+    const auto &excludedComponents = system.getExcludedComponentIds();
+    for(auto &component : excludedComponents) {
+        auto &exc = systemsExcludedComponents[component];
+        exc.erase(std::remove(exc.begin(), exc.end(), &system), exc.end());
     }
 }
 
-void ECS::registerSystem(const SystemBase &system) {
-    auto &required_component_types = system.getRequired();
-    for(auto &type : required_component_types) {
-        registerComponentType(type);
-    }
-}
-
-void ECS::removeSystem() {
+void ECS::addFittingEntitiesToSystem(SystemBase &system) {
+    // get systems bitmasks (required, excluded)
+    // foreach entity, check bitmasks
+    // connect if fitting
 }
 
 }

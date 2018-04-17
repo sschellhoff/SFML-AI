@@ -164,6 +164,7 @@ public:
         }
         return size();
     }
+
     size_type getNext(size_type position) const {
         auto initial_block = getBlockNo(position);
         auto position_in_block = getPositionInBlock(position);
@@ -177,6 +178,14 @@ public:
             }
         }
         return size();
+    }
+
+    std::vector<size_type> getSet() const {
+        std::vector<size_type> result;
+        for(auto idx = getFirst(); idx < size(); idx = getNext(idx + 1)) {
+            result.push_back(idx);
+        }
+        return result;
     }
 
     std::string toString() const {

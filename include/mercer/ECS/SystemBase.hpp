@@ -26,26 +26,37 @@ SOFTWARE.
 
 #include "ECS.hpp"
 #include <vector>
-#include "../Misc/TypeInfoRef.hpp"
+#include <type_traits>
+#include "ComponentBitmask.hpp"
+#include "ComponentBase.hpp"
 
 namespace mercer {
 
 class SystemBase {
 private:
     ECS *ecs;
+    Bitmask required;
+    Bitmask excluded;
+
 protected:
-    std::vector<TypeInfoRef> required;
     template<typename T>
     void requires() {
-        required.push_back(typeid(T));
+        static_assert(std::is_base_of<ComponentBase, T>::value);
+        required.set(T::GetId());
     }
 
     template<typename T>
-    void exclude();
+    void exclude() {
+        static_assert(std::is_base_of<ComponentBase, T>::value);
+        excluded.set(T::GetId());
+    }
 public:
     SystemBase(ECS *ecs);
 
-    const std::vector<TypeInfoRef> &getRequired() const;
+    std::vector<Bitmask::size_type> getRequiredComponentIds() const;
+    std::vector<Bitmask::size_type> getExcludedComponentIds() const;
+
+    bool fits(Bitmask bitmask) const;
 };
 
 }
