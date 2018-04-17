@@ -122,6 +122,6 @@ TEST_CASE("Testing to string", "[Bitstring]") {
     bitset.set(3);
     CHECK(std::string("01010000000000000000000000000000") == bitset.toString());
 }
+
 // more tests for:
-// toString
 // operators

@@ -24,8 +24,11 @@ SOFTWARE.
 
 #pragma once
 
+#include "../Misc/Bitset.hpp"
+
 namespace mercer {
 
 using BitmaskIndexType = unsigned long long;
+using Bitmask = Bitset<BitmaskIndexType>;
 
 }
