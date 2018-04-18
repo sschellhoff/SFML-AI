@@ -90,7 +90,6 @@ public:
         }
         return *this;
     }
-    
 
     Bitset &set(size_type position) {
         return setValue(position, true);
