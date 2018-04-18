@@ -116,6 +116,54 @@ TEST_CASE("Testing get first and get next", "[Bitset]") {
     CHECK(7 == bitset.getNext(6));
 }
 
+TEST_CASE("Testing includes and excludes", "[Bitset]") {
+    mercer::Bitset<> bitset_0{3};
+    mercer::Bitset<> bitset_1{3};
+    mercer::Bitset<> bitset_2{3};
+    mercer::Bitset<> bitset_3{3};
+    mercer::Bitset<> bitset_4{3};
+    
+    bitset_0.set(1);
+    bitset_0.set(7);
+    bitset_0.set(29);
+    bitset_0.set(33);
+    bitset_0.set(64);
+    bitset_0.set(71);
+    bitset_0.set(72);
+
+    bitset_1.set(1);
+    bitset_1.set(7);
+    bitset_1.set(29);
+    bitset_1.set(33);
+    bitset_1.set(64);
+    bitset_1.set(71);
+    bitset_1.set(72);
+
+    bitset_2.set(7);
+    bitset_2.set(29);
+    bitset_2.set(64);
+    bitset_2.set(72);
+
+    bitset_3.set(71);
+
+    bitset_4.set(4);
+    bitset_4.set(22);
+    bitset_4.set(40);
+    bitset_4.set(70);
+    
+    CHECK(bitset_0.includes(bitset_1));
+    CHECK(bitset_0.includes(bitset_2));
+    CHECK(bitset_0.includes(bitset_3));
+    CHECK(bitset_0.includes(bitset_4) == false);
+    CHECK(bitset_3.includes(bitset_0) == false);
+    CHECK(bitset_4.includes(bitset_0) == false);
+
+    CHECK(bitset_0.excludes(bitset_1) == false);
+    CHECK(bitset_0.excludes(bitset_2) == false);
+    CHECK(bitset_0.excludes(bitset_3) == false);
+    CHECK(bitset_0.excludes(bitset_4));
+}
+
 TEST_CASE("Testing to string", "[Bitstring]") {
     mercer::Bitset<> bitset;
     bitset.set(1);

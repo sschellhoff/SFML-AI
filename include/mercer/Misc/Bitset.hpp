@@ -188,6 +188,30 @@ public:
         return result;
     }
 
+    bool includes(const Bitset &other) const {
+        if(numBlocks() == other.numBlocks()) {
+            for(auto i = 0; i < numBlocks(); i++) {
+                if((data[i] & other.data[i]) != other.data[i]) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    bool excludes(const Bitset &other) const {
+        if(numBlocks() == other.numBlocks()) {
+            for(auto i = 0; i < numBlocks(); i++) {
+                if((data[i] & other.data[i]) != 0) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
     std::string toString() const {
         if(empty()) {
             return "";
