@@ -28,7 +28,7 @@ SOFTWARE.
 
 namespace mercer {
 
-using BitmaskIndexType = unsigned long long;
+using BitmaskIndexType = int;
 using Bitmask = Bitset<BitmaskIndexType>;
 
 }

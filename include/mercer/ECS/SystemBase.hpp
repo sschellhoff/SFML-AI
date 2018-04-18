@@ -29,6 +29,7 @@ SOFTWARE.
 #include <type_traits>
 #include "ComponentBitmask.hpp"
 #include "ComponentBase.hpp"
+#include "EntityID.hpp"
 
 namespace mercer {
 
@@ -37,6 +38,7 @@ private:
     ECS *ecs;
     Bitmask required;
     Bitmask excluded;
+    std::vector<EntityID> entities;
 
 protected:
     template<typename T>
@@ -46,12 +48,19 @@ protected:
     }
 
     template<typename T>
-    void exclude() {
+    void excludes() {
         static_assert(std::is_base_of<ComponentBase, T>::value);
         excluded.set(T::GetId());
     }
+
+    virtual void process(Entity entity) = 0;
 public:
     SystemBase(ECS *ecs);
+
+    void update();
+
+    void addEntity(EntityID id);
+    void removeEntity(EntityID id);
 
     std::vector<Bitmask::size_type> getRequiredComponentIds() const;
     std::vector<Bitmask::size_type> getExcludedComponentIds() const;

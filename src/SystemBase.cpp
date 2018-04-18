@@ -23,10 +23,26 @@ SOFTWARE.
 */
 
 #include "mercer/ECS/SystemBase.hpp"
+#include "mercer/ECS/Entity.hpp"
+#include <algorithm>
 
 namespace mercer {
 
 SystemBase::SystemBase(ECS *ecs) : ecs(ecs) {
+}
+
+void SystemBase::update() {
+    for(auto entity_id : entities) {
+        process(ecs->getEntity(entity_id));
+    }
+}
+
+void SystemBase::addEntity(EntityID id) {
+    entities.push_back(id);
+}
+
+void SystemBase::removeEntity(EntityID id) {
+    entities.erase(std::remove(entities.begin(), entities.end(), id), entities.end());
 }
 
 std::vector<Bitmask::size_type> SystemBase::getRequiredComponentIds() const {
@@ -38,10 +54,7 @@ std::vector<Bitmask::size_type> SystemBase::getExcludedComponentIds() const {
 }
 
 bool SystemBase::fits(Bitmask bitmask) const {
-    // excluded && bitmask = 0
-    // required && bitmask = required
-    // then true
-    return false;
+    return bitmask.includes(required) && bitmask.excludes(excluded);
 }
 
 }

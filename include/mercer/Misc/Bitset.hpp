@@ -182,7 +182,7 @@ public:
 
     std::vector<size_type> getSet() const {
         std::vector<size_type> result;
-        for(auto idx = getFirst(); idx < size(); idx = getNext(idx + 1)) {
+        for(auto idx = getFirst(); idx < size() && get(idx); idx = getNext(idx + 1)) {
             result.push_back(idx);
         }
         return result;

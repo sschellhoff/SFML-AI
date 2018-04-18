@@ -22,7 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <SFML/Graphics.hpp>
 #include <string>
 #include <iostream>
 #include "../../include/mercer/ECS/ECS.hpp"
@@ -30,10 +29,17 @@ SOFTWARE.
 #include "../../include/mercer/ECS/ComponentBase.hpp"
 #include "../../include/mercer/ECS/SystemBase.hpp"
 
+enum ComponentTypes {
+    TEXT = 0,
+    NUMBER,
+    EVIL,
+    SIZE
+};
+
 class TextComponent : public mercer::ComponentBase {
 public:
-    static std::size_t GetId() {
-        return 0;
+    static mercer::Bitmask::size_type GetId() {
+        return ComponentTypes::TEXT;
     }
     TextComponent(const std::string &text) : text(text) {
     }
@@ -43,8 +49,8 @@ public:
 
 class NumberComponent : public mercer::ComponentBase {
 public:
-    static std::size_t GetId() {
-        return 1;
+    static mercer::Bitmask::size_type GetId() {
+        return ComponentTypes::NUMBER;
     }
     NumberComponent() : number(0) {
     }
@@ -55,53 +61,38 @@ public:
     int number;
 };
 
+class EvilComponent : public mercer::ComponentBase {
+public:
+    static mercer::Bitmask::size_type GetId() {
+        return ComponentTypes::EVIL;
+    }
+};
+
 class TextSystem : public mercer::SystemBase {
+protected:
+    virtual void process(mercer::Entity entity) {
+        std::cout << entity.getComponent<TextComponent>().text << std::endl;
+    }
 public:
     TextSystem(mercer::ECS *ecs) : SystemBase(ecs) {
         requires<TextComponent>();
+        excludes<EvilComponent>();
     }
 };
 
 int main(int argc, char** argv) {
-    mercer::ECS ecs{2};
+    mercer::ECS ecs{ComponentTypes::SIZE};
     auto entity = ecs.createEntity();
-    entity.addComponent<TextComponent>("");
+    entity.addComponent<TextComponent>("qwertz");
     auto &number_component = entity.addComponent<NumberComponent>();
     number_component.number = 1337;
+
+    auto entity_bad = ecs.createEntity();
+    entity_bad.addComponent<TextComponent>("qwerty");
+    entity_bad.addComponent<EvilComponent>();
 
     TextSystem text_system{&ecs};
     ecs.registerSystem(text_system);
 
-    sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
-
-    constexpr float TPS = 60;
-    const sf::Time time_per_update = sf::seconds(1.0f / TPS);
-    unsigned ticks = 0;
-    sf::Clock timer;
-    auto last_time = sf::Time::Zero;
-    auto lag = sf::Time::Zero;
-
-    while(window.isOpen()) {
-
-        auto current_time = timer.getElapsedTime();
-        auto elapsed_time = current_time - last_time;
-        last_time = current_time;
-        lag += elapsed_time;
-
-        sf::Event event;
-        while(window.pollEvent(event)) {
-            if(event.type == sf::Event::Closed) {
-                window.close();
-            }
-        }
-
-        while(lag >= time_per_update) {
-            ticks++;
-            lag -= time_per_update;
-        }
-
-        window.clear(sf::Color::Black);
-
-        window.display();
-    }
+    ecs.update();
 }

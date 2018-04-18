@@ -31,7 +31,13 @@ SOFTWARE.
 
 namespace mercer {
 
-ECS::ECS(std::size_t max_components) : next_entity_id(0), systemsRequiredComponents(max_components), systemsExcludedComponents(max_components) {
+ECS::ECS(Bitmask::size_type max_components) : next_entity_id(0), systemsRequiredComponents(max_components), systemsExcludedComponents(max_components) {
+}
+
+void ECS::update() {
+    for(auto &system : systems) {
+        system->update();
+    }
 }
 
 Entity ECS::createEntity() {
@@ -44,7 +50,12 @@ void ECS::destroyEntity(EntityID entity_id) {
     components.erase(entity_id);
 }
 
+Entity ECS::getEntity(EntityID entity_id) {
+    return Entity{entity_id, this};
+}
+
 void ECS::registerSystem(SystemBase &system) {
+    systems.push_back(&system);
     const auto &requiredComponents = system.getRequiredComponentIds();
     for(auto &component : requiredComponents) {
         systemsRequiredComponents[component].push_back(&system);
@@ -57,6 +68,7 @@ void ECS::registerSystem(SystemBase &system) {
 }
 
 void ECS::removeSystem(SystemBase &system) {
+    systems.erase(std::remove(systems.begin(), systems.end(), &system), systems.end());
     const auto &requiredComponents = system.getRequiredComponentIds();
     for(auto &component : requiredComponents) {
         auto &req = systemsRequiredComponents[component];
@@ -70,9 +82,11 @@ void ECS::removeSystem(SystemBase &system) {
 }
 
 void ECS::addFittingEntitiesToSystem(SystemBase &system) {
-    // get systems bitmasks (required, excluded)
-    // foreach entity, check bitmasks
-    // connect if fitting
+    for(auto &mask : bitmasks) {
+        if(system.fits(mask.second)) {
+            system.addEntity(mask.first);
+        }
+    }
 }
 
 }

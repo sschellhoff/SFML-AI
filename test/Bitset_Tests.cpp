@@ -164,7 +164,19 @@ TEST_CASE("Testing includes and excludes", "[Bitset]") {
     CHECK(bitset_0.excludes(bitset_4));
 }
 
-TEST_CASE("Testing to string", "[Bitstring]") {
+TEST_CASE("Testing getting set", "[Bitset]") {
+    mercer::Bitset<> bitset{3};
+
+    bitset.set(0);
+    auto set = bitset.getSet();
+    CHECK((set.size() == 1 && set[0] == 0));
+
+    bitset.set(33);
+    set = bitset.getSet();
+    CHECK((set.size() == 2 && set[0] == 0 && set[1] == 33));
+}
+
+TEST_CASE("Testing to string", "[Bitset]") {
     mercer::Bitset<> bitset;
     bitset.set(1);
     bitset.set(3);
