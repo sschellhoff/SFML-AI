@@ -35,8 +35,13 @@ ECS::ECS(Bitmask::size_type max_components) : next_entity_id(0), systemsRequired
 }
 
 void ECS::update() {
-    for(auto &system : systems) {
-        system->update();
+    for(auto it = systems.begin(); it != systems.end(); ) {
+        if(!(*it)->shouldRemove()) {
+            (*it)->update();
+            it++;
+        } else {
+            it = systems.erase(it);
+        }
     }
 }
 
@@ -54,6 +59,14 @@ Entity ECS::getEntity(EntityID entity_id) {
     return Entity{entity_id, this};
 }
 
+bool ECS::isEntityAlive(EntityID entity_id) {
+    return bitmasks.find(entity_id) != bitmasks.end();
+}
+
+const Bitmask &ECS::getBitmask(EntityID entity_id) {
+    return bitmasks[entity_id];
+}
+
 void ECS::registerSystem(SystemBase &system) {
     systems.push_back(&system);
     const auto &requiredComponents = system.getRequiredComponentIds();
@@ -68,6 +81,9 @@ void ECS::registerSystem(SystemBase &system) {
 }
 
 void ECS::removeSystem(SystemBase &system) {
+    if(!system.shouldRemove()) {
+        system.markToRemove();
+    }
     systems.erase(std::remove(systems.begin(), systems.end(), &system), systems.end());
     const auto &requiredComponents = system.getRequiredComponentIds();
     for(auto &component : requiredComponents) {

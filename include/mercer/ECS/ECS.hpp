@@ -61,6 +61,8 @@ public:
     Entity createEntity();
     void destroyEntity(EntityID entity_id);
     Entity getEntity(EntityID entity_id);
+    bool isEntityAlive(EntityID entity_id);
+    const Bitmask &getBitmask(EntityID entity_id);
 
     template<typename T>
     T &getComponent(EntityID id) {

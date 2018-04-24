@@ -39,6 +39,7 @@ private:
     Bitmask required;
     Bitmask excluded;
     std::vector<EntityID> entities;
+    bool marked_to_remove;
 
 protected:
     template<typename T>
@@ -61,6 +62,9 @@ public:
 
     void addEntity(EntityID id);
     void removeEntity(EntityID id);
+
+    void markToRemove();
+    bool shouldRemove() const;
 
     std::vector<Bitmask::size_type> getRequiredComponentIds() const;
     std::vector<Bitmask::size_type> getExcludedComponentIds() const;

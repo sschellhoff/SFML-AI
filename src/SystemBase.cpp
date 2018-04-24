@@ -28,12 +28,17 @@ SOFTWARE.
 
 namespace mercer {
 
-SystemBase::SystemBase(ECS *ecs) : ecs(ecs) {
+SystemBase::SystemBase(ECS *ecs) : ecs(ecs), marked_to_remove(false) {
 }
 
 void SystemBase::update() {
-    for(auto entity_id : entities) {
-        process(ecs->getEntity(entity_id));
+    for(auto it = entities.begin(); it != entities.end(); ) {
+        if(ecs->isEntityAlive(*it) && fits(ecs->getBitmask(*it))) {
+            process(ecs->getEntity(*it));
+            it++;
+        } else {
+            it = entities.erase(it);
+        }
     }
 }
 
@@ -43,6 +48,15 @@ void SystemBase::addEntity(EntityID id) {
 
 void SystemBase::removeEntity(EntityID id) {
     entities.erase(std::remove(entities.begin(), entities.end(), id), entities.end());
+}
+
+void SystemBase::markToRemove() {
+    marked_to_remove = true;
+    ecs->removeSystem(*this);
+}
+
+bool SystemBase::shouldRemove() const {
+    return marked_to_remove;
 }
 
 std::vector<Bitmask::size_type> SystemBase::getRequiredComponentIds() const {
