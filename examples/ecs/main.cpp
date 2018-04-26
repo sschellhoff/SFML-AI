@@ -80,8 +80,20 @@ public:
     }
 };
 
+class NumberSystem : public mercer::SystemBase {
+protected:
+    virtual void process(mercer::Entity entity) {
+        std::cout << entity.getComponent<NumberComponent>().number << std::endl;
+    }
+public:
+    NumberSystem(mercer::ECS *ecs) : SystemBase(ecs) {
+        requires<NumberComponent>();
+    }
+};
+
 int main(int argc, char** argv) {
     mercer::ECS ecs{ComponentTypes::SIZE};
+
     auto entity = ecs.createEntity();
     entity.addComponent<TextComponent>("qwertz");
     auto &number_component = entity.addComponent<NumberComponent>();
@@ -91,8 +103,14 @@ int main(int argc, char** argv) {
     entity_bad.addComponent<TextComponent>("qwerty");
     entity_bad.addComponent<EvilComponent>();
 
+    auto entity_good = ecs.createEntity();
+    entity_good.addComponent<NumberComponent>(42);
+    entity_good.addComponent<EvilComponent>();
+
     TextSystem text_system{&ecs};
+    NumberSystem number_system{&ecs};
     ecs.registerSystem(text_system);
+    ecs.registerSystem(number_system);
 
     ecs.update();
 }
