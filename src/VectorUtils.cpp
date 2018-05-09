@@ -59,4 +59,8 @@ sf::Vector2f truncateVector(const sf::Vector2f &vector, float length) {
     return normalized * length;
 }
 
+bool hasVectorMinLength(const sf::Vector2f &vector, float min_length) {
+    return vectorLengthSquared(vector) > min_length;
+}
+
 }

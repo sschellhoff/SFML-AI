@@ -38,4 +38,6 @@ sf::Vector2f getNormalized(const sf::Vector2f &vector);
 
 sf::Vector2f truncateVector(const sf::Vector2f &vector, float length);
 
+bool hasVectorMinLength(const sf::Vector2f &vector, float min_length);
+
 }
