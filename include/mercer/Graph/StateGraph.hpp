@@ -46,7 +46,7 @@ public:
 
     void addTransition(const STATE_TYPE start_state, const S input, const STATE_TYPE target_state) {
         if(delta.capacity() <= start_state) {
-            const auto min_capacity = std::min(start_state * 2, 8UL);
+            const auto min_capacity = std::max(start_state * 2, 8UL);
             delta.resize(min_capacity);
         }
         delta[start_state][input] = target_state;
